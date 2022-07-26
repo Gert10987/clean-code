@@ -23,6 +23,22 @@ class MoneyTests extends Specification {
         "7.88888" | "2.888" | "10.78"
     }
 
+    def 'should subtract two money objects properly'() {
+
+        when:
+        Money res = Money.PLN(base) - Money.PLN(toSubtract)
+
+        then:
+        Money.PLN(expected) == res
+
+        where:
+        base     | toSubtract | expected
+        "100"    | "10"       | "90"
+        "0.92"   | "0.80"     | "0.12"
+        "126.22" | "88.88"    | "37.34"
+        "100"    | "100"      | "0"
+    }
+
     def 'should throw exception when money is equal than zero'() {
 
         when:

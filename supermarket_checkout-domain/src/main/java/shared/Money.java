@@ -26,11 +26,22 @@ public class Money {
         return new Money(new BigDecimal(amount), Currency.getInstance("PLN"));
     }
 
+    public static Money PLN(BigDecimal amount) {
+        return new Money(amount, Currency.getInstance("PLN"));
+    }
+
+    public static Money ZERO_PLN() {
+        return PLN("0");
+    }
+
     public Money add(Money money) {
         return new Money(amount.add(money.getAmount()), getCurrency());
     }
 
-    private BigDecimal getAmount() {
+    public Money minus(Money money) {
+        return new Money(amount.subtract(money.getAmount()), getCurrency());
+    }
+    public BigDecimal getAmount() {
         return amount;
     }
 
