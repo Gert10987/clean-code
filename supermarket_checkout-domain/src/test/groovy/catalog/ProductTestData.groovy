@@ -14,12 +14,12 @@ class ProductTestData {
         new Product(new Money(properties.price as String, properties.currency as Currency) as Money, properties.productType as ProductType, properties.expirationDate as LocalDate)
     }
 
-    static Product prepareMilk() {
-        sampleProduct(productType: ProductType.MILK)
+    static Product prepareMilk(String price = "3.00") {
+        sampleProduct(productType: ProductType.MILK, price: price)
     }
 
-    static Product prepareLaptop() {
-        sampleProduct(productType: ProductType.LAPTOP)
+    static Product prepareLaptop(String price = "1000.0") {
+        sampleProduct(productType: ProductType.LAPTOP, price: price)
     }
 
     static Map<String, Object> SAMPLE_MAP = [
