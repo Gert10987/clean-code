@@ -7,11 +7,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface DiscountPolicy {
-
     Money calculateAndApply(Product product, List<Item> size);
 }
 
-class Second50PercentCheaperForThreeDiscountPolicy implements DiscountPolicy {
+class Second50PercentCheaperPolicy implements DiscountPolicy {
 
     @Override
     public Money calculateAndApply(Product product, List<Item> currentItems) {
@@ -20,7 +19,7 @@ class Second50PercentCheaperForThreeDiscountPolicy implements DiscountPolicy {
 
         if (currentItems.size() >= 2) {
             for (int i = 0; i < 1; i++) {
-                Money discount = get50percentOriginalPrice(product);
+                Money discount = get50percentOfOriginalPrice(product);
                 currentItems.get(i).setDiscount(discount);
                 res = res.add(discount);
             }
@@ -28,7 +27,7 @@ class Second50PercentCheaperForThreeDiscountPolicy implements DiscountPolicy {
         return res;
     }
 
-    private static Money get50percentOriginalPrice(Product product) {
+    private static Money get50percentOfOriginalPrice(Product product) {
         return Money.PLN(product.getPrice().getAmount().multiply(new BigDecimal("0.5")));
     }
 }

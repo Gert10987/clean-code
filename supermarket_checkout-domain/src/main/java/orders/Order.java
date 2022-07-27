@@ -1,6 +1,8 @@
 package orders;
 
 import catalog.Product;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import shared.Money;
 
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode
+@ToString
 public class Order {
 
     private final List<Item> items = new ArrayList<>();

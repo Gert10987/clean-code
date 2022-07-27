@@ -1,12 +1,17 @@
 package shared;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import shared.exception.CalculatingMoneyException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
-import java.util.Objects;
 
+@EqualsAndHashCode
+@ToString
+@Getter
 public class Money {
 
     private BigDecimal amount;
@@ -41,9 +46,6 @@ public class Money {
     public Money minus(Money money) {
         return new Money(amount.subtract(money.getAmount()), getCurrency());
     }
-    public BigDecimal getAmount() {
-        return amount;
-    }
 
     private void setAmount(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
@@ -51,10 +53,6 @@ public class Money {
         }
 
         this.amount = amount;
-    }
-
-    private Currency getCurrency() {
-        return currency;
     }
 
     private void setCurrency(Currency currency) {
@@ -66,27 +64,5 @@ public class Money {
             throw CalculatingMoneyException.ONLY_PL_CURRENCY_IS_SUPPORTED;
         }
         this.currency = currency;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(amount, currency);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Money money = (Money) o;
-        return Objects.equals(amount, money.amount) && Objects.equals(currency, money.currency);
-    }
-
-    @Override
-    public String toString() {
-        return "amount = " + amount + " " + "currency = " + currency + " ";
     }
 }

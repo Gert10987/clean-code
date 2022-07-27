@@ -63,7 +63,7 @@ class OrderTest extends Specification {
         order = new Order(discountFactory)
 
         and: "mock discount"
-        discountFactory.getByProductType(ProductType.MILK) >> [new Second50PercentCheaperForThreeDiscountPolicy()]
+        discountFactory.getByProductType(ProductType.MILK) >> [new Second50PercentCheaperPolicy()]
 
         and: "expected value"
         Money expectedTotalPrice = Money.PLN("15.45")
@@ -82,7 +82,7 @@ class OrderTest extends Specification {
         order = new Order(discountFactory)
 
         and: "mock discount"
-        discountFactory.getByProductType(ProductType.MILK) >> [new Second50PercentCheaperForThreeDiscountPolicy()]
+        discountFactory.getByProductType(ProductType.MILK) >> [new Second50PercentCheaperPolicy()]
         discountFactory.getByProductType(ProductType.LAPTOP) >> [new FreeForSpecificAmountInOrderPolicy(2, 1)]
 
         and: "expected value"

@@ -8,7 +8,7 @@ class DiscountPolicyTest extends Specification {
 
     def 'should calculate some user stories - Second50PercentCheaperForThreeDiscountPolicy'() {
         given:
-        def policy = new Second50PercentCheaperForThreeDiscountPolicy()
+        def policy = new Second50PercentCheaperPolicy()
 
         when:
         def totalDiscount = policy.calculateAndApply(product, items)

@@ -19,7 +19,6 @@ class ProductTest extends Specification {
         expirationDate                | _
         LocalDate.now().minusDays(30) | _
         LocalDate.now().minusDays(1)  | _
-        LocalDate.now()               | _
     }
 
     def 'should not throw exception when the expiration date is equal to now or later'() {

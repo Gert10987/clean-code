@@ -1,10 +1,12 @@
 package orders;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import shared.Money;
 import shared.ProductType;
 
-import java.util.Objects;
-
+@EqualsAndHashCode
+@ToString
 class Item {
 
     private final ProductType productType;
@@ -33,22 +35,5 @@ class Item {
 
     public ProductType getProductType() {
         return productType;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Item item = (Item) o;
-        return productType == item.productType && Objects.equals(price, item.price) && Objects.equals(discount, item.discount);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(productType, price, discount);
     }
 }
