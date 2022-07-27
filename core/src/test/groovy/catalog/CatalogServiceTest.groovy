@@ -1,24 +1,21 @@
 package catalog
 
 import catalog.exception.ProductNotExistException
-import catalog.fake.TestCatalogServiceImpl
 import shared.ProductType
 import spock.lang.Specification
-
-import static catalog.ProductTestData.prepareLaptop
-import static catalog.ProductTestData.prepareMilk
 
 class CatalogServiceTest extends Specification {
 
     private CatalogService catalogService
+    private FakeOutPorts.TestCatalogDatabaseAdapter testCatalogDatabaseAdapter
 
     def setup() {
-        catalogService = new TestCatalogServiceImpl()
+        catalogService = new CatalogService(Mock(InPorts.ProductsLoaderPort.class), new FakeOutPorts.TestCatalogDatabaseAdapter())
     }
 
     def 'should add milk to catalog'() {
         given:
-        def milk = prepareMilk()
+        def milk = ProductTestData.prepareMilk()
 
         when:
         catalogService.add(milk)
@@ -29,8 +26,8 @@ class CatalogServiceTest extends Specification {
 
     def 'should get product by id'() {
         given:
-        def milk = prepareMilk()
-        def products = prepareContextWithTwoProducts(milk, prepareLaptop())
+        def milk = ProductTestData.prepareMilk()
+        def products = prepareContextWithTwoProducts(milk, ProductTestData.prepareLaptop())
 
         when:
         def res = catalogService.getById(products.get(ProductType.MILK).getId())
@@ -41,8 +38,8 @@ class CatalogServiceTest extends Specification {
 
     def 'should get product by type'() {
         given:
-        def laptop = prepareLaptop()
-        prepareContextWithTwoProducts(prepareMilk(), laptop)
+        def laptop = ProductTestData.prepareLaptop()
+        prepareContextWithTwoProducts(ProductTestData.prepareMilk(), laptop)
 
         when:
         def res = catalogService.getByProductType(ProductType.LAPTOP)
