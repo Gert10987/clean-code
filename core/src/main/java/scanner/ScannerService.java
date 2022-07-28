@@ -9,7 +9,6 @@ import shared.Money;
 import shared.ProductType;
 
 public class ScannerService {
-
     private InPorts.ScannerPort scannerPort;
     private final OutPorts.PrinterPort printerPort;
 
