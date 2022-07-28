@@ -14,6 +14,19 @@
     </properties>
 
     <dependencies>
+        <!--    JOOQ   -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jooq</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.4.0</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.easyproramming.scanner</groupId>
             <artifactId>domain</artifactId>
@@ -24,23 +37,58 @@
             <artifactId>core</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-            <version>3.17.2</version>
-        </dependency>
-
-        <!-- These may not be required, unless you use the GenerationTool manually for code generation -->
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta</artifactId>
-            <version>3.17.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen</artifactId>
-            <version>3.17.2</version>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-postgres</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!--Insert your DB configuration-->
+                            <jdbc>
+                                <driver>org.postgresql.Driver</driver>
+                                <url>jdbc:postgresql://localhost:5432/postgres</url>
+                                <user>postgres</user>
+                                <password>dev_pwd</password>
+                            </jdbc>
+                            <generator>
+                                <database>
+                                    <name>
+                                        org.jooq.meta.postgres.PostgresDatabase
+                                    </name>
+                                    <includes>.*</includes>
+                                    <excludes>schema_version | flyway_schema_history</excludes>
+                                    <inputSchema>scanner_app</inputSchema>
+                                </database>
+                                <generate>
+                                    <pojos>true</pojos>
+                                    <pojosEqualsAndHashCode>
+                                        true
+                                    </pojosEqualsAndHashCode>
+                                    <javaTimeTypes>true</javaTimeTypes>
+                                    <fluentSetters>true</fluentSetters>
+                                </generate>
+                                <target>
+                                    <packageName>
+                                        jooq/
+                                    </packageName>
+                                    <directory>
+                                        src/main/java/jooq
+                                    </directory>
+                                </target>
+                            </generator>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

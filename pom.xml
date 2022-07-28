@@ -21,6 +21,5 @@
         <module>domain</module>
         <module>core</module>
         <module>application</module>
-        <module>adapters</module>
     </modules>
 </project>
