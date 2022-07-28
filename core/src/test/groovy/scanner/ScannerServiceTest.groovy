@@ -16,7 +16,7 @@ class ScannerServiceTest extends Specification {
 
     def setup() {
         catalogService = new CatalogService(Mock(catalog.InPorts.ProductsLoaderPort.class), new FakeOutPorts.TestCatalogDatabaseAdapter())
-        scannerService = new ScannerService(Mock(InPorts.ScannerPort), Mock(OutPorts.PrinterPort), catalogService, Mock(InPorts.DiscountLoaderPort))
+        scannerService = new ScannerService(Mock(OutPorts.PrinterPort), catalogService, Mock(InPorts.DiscountLoaderPort))
 
         scannerService.newOrder()
     }

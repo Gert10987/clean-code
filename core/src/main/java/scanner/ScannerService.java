@@ -9,16 +9,14 @@ import shared.Money;
 import shared.ProductType;
 
 public class ScannerService {
-    private InPorts.ScannerPort scannerPort;
     private final OutPorts.PrinterPort printerPort;
 
     private final CatalogService catalogService;
     private final InPorts.DiscountLoaderPort discountLoaderPort;
     private Order tempOrder;
 
-    public ScannerService(InPorts.ScannerPort scannerPort, OutPorts.PrinterPort printerPort,
+    public ScannerService(OutPorts.PrinterPort printerPort,
                           CatalogService catalogService, InPorts.DiscountLoaderPort discountLoaderPort) {
-        this.scannerPort = scannerPort;
         this.printerPort = printerPort;
         this.catalogService = catalogService;
         this.discountLoaderPort = discountLoaderPort;
