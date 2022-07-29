@@ -2,6 +2,7 @@ package orders;
 
 import catalog.Product;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import shared.Money;
 
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 @ToString
 public class Order {
 
+    @Getter
+    private OrderId id;
     private final List<Item> items = new ArrayList<>();
 
     private Money totalPrice = Money.ZERO_PLN();
@@ -21,6 +24,7 @@ public class Order {
 
     private final DiscountFactory discountFactory;
     public Order(DiscountFactory discountFactory) {
+        this.id = new OrderId();
         this.discountFactory = discountFactory;
     }
 

@@ -7,7 +7,6 @@ import spock.lang.Specification
 class CatalogServiceTest extends Specification {
 
     private CatalogService catalogService
-    private FakeOutPorts.TestCatalogDatabaseAdapter testCatalogDatabaseAdapter
 
     def setup() {
         catalogService = new CatalogService(Mock(InPorts.ProductsLoaderPort.class), new FakeOutPorts.TestCatalogDatabaseAdapter())

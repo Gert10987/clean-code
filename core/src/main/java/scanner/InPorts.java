@@ -1,6 +1,7 @@
 package scanner;
 
 import orders.DiscountFactory;
+import orders.OrderId;
 import shared.ProductType;
 
 interface InPorts {
@@ -14,6 +15,6 @@ interface InPorts {
 
         void newOrder();
 
-        void scanProduct(ProductType productType);
+        void scanProduct(OrderId id, ProductType productType);
     }
 }
