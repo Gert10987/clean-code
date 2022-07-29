@@ -18,5 +18,10 @@ class FakeOutPorts {
         Optional<Order> getById(OrderId orderId) {
             return Optional.ofNullable(orders.get(orderId))
         }
+
+        @Override
+        void update(Order order) {
+            orders.put(order.getId(), order)
+        }
     }
 }

@@ -35,14 +35,17 @@ public class ScannerService {
     public void scanProduct(OrderId id, ProductType productType) {
         Product foundProduct = catalogService.getByProductType(productType);
 
-        orders.getById(id).ifPresentOrElse(order -> order.addProduct(foundProduct), () -> {
+        orders.getById(id).ifPresentOrElse(order -> {
+            order.addProduct(foundProduct);
+            orders.update(order);
+        }, () -> {
             throw new OrderNotFoundException("Order not found [%s]", id);
         });
     }
 
     public Money getTotalValueOfOrder(OrderId id) {
         return orders.getById(id)
-                .map(Order::getTotalPrice)
+                .map(Order::getActualTotalPrice)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found [%s]", id));
     }
 

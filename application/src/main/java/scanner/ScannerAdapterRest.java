@@ -2,12 +2,15 @@ package scanner;
 
 import orders.OrderId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import shared.ProductType;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/orders")
-public class ScannerAdapterRest implements InPorts.ScannerPort {
+public class ScannerAdapterRest {
 
     private ScannerService scannerService;
 
@@ -16,15 +19,13 @@ public class ScannerAdapterRest implements InPorts.ScannerPort {
         this.scannerService = scannerService;
     }
 
-    @Override
     @PostMapping()
-    public void newOrder() {
-        scannerService.newOrder();
+    public OrderId newOrder() {
+        return scannerService.newOrder();
     }
 
-    @Override
-    @PatchMapping()
-    public void scanProduct(OrderId id, ProductType productType) {
-        scannerService.scanProduct(id, productType);
+    @PatchMapping(value = "/{id}", consumes = {MediaType.TEXT_PLAIN_VALUE})
+    public void scanProduct(@PathVariable UUID id, @RequestBody String productType) {
+        scannerService.scanProduct(new OrderId(id), ProductType.valueOf(productType));
     }
 }

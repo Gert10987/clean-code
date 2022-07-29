@@ -1,6 +1,7 @@
 package orders;
 
 import catalog.Product;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -14,18 +15,30 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @ToString
 public class Order {
-
     @Getter
-    private OrderId id;
-    private final List<Item> items = new ArrayList<>();
+    private final OrderId id;
+    @Getter
+    private final List<Item> items;
+    @Getter
+    private final Money totalDiscount;
+    private final DiscountFactory discountFactory;
 
     private Money totalPrice = Money.ZERO_PLN();
-    private final Money totalDiscount = Money.ZERO_PLN();
 
-    private final DiscountFactory discountFactory;
+    public Order(OrderId id, List<Item> items, Money totalDiscount, DiscountFactory discountFactory, Money totalPrice) {
+        this.id = id;
+        this.items = items;
+        this.totalDiscount = totalDiscount;
+        this.discountFactory = discountFactory;
+        this.totalPrice = totalPrice;
+    }
+
     public Order(DiscountFactory discountFactory) {
         this.id = new OrderId();
         this.discountFactory = discountFactory;
+
+        this.totalDiscount = Money.ZERO_PLN();
+        this.items = new ArrayList<>();
     }
 
     public void addProduct(Product product) {
@@ -34,14 +47,14 @@ public class Order {
 
         items.add(item);
 
-        totalPrice = totalPrice.add(item.getPrice());
+        totalPrice.add(item.getPrice());
 
         Optional.ofNullable(discountFactory).ifPresent(dF -> applyDiscount(product, dF));
 
         calculate();
     }
 
-    public Money getTotalPrice() {
+    public Money getActualTotalPrice() {
         return totalPrice.minus(totalDiscount);
     }
 

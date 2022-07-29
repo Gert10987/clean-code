@@ -1,5 +1,6 @@
 package orders;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import shared.Money;
@@ -7,7 +8,7 @@ import shared.ProductType;
 
 @EqualsAndHashCode
 @ToString
-class Item {
+public class Item {
 
     private final ProductType productType;
 

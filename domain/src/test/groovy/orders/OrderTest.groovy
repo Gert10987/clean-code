@@ -17,7 +17,7 @@ class OrderTest extends Specification {
         order.addProduct(ProductTestData.prepareMilk("10.30"))
 
         then:
-        order.getTotalPrice() == Money.PLN("10.30")
+        order.getActualTotalPrice() == Money.PLN("10.30")
     }
 
     def 'should some products to order and calculate total price'() {
@@ -34,7 +34,7 @@ class OrderTest extends Specification {
         order.addProduct(ProductTestData.prepareLaptop("200.30"))
 
         then:
-        order.getTotalPrice() == expectedTotalPrice
+        order.getActualTotalPrice() == expectedTotalPrice
     }
 
     def 'should add discount to products - two for three'() {
@@ -54,7 +54,7 @@ class OrderTest extends Specification {
         order.addProduct(ProductTestData.prepareMilk("10.30"))
 
         then:
-        order.getTotalPrice() == expectedTotalPrice
+        order.getActualTotalPrice() == expectedTotalPrice
     }
 
     def 'should add discount to products - second 50% cheaper'() {
@@ -73,7 +73,7 @@ class OrderTest extends Specification {
         order.addProduct(ProductTestData.prepareMilk("10.30"))
 
         then:
-        order.getTotalPrice() == expectedTotalPrice
+        order.getActualTotalPrice() == expectedTotalPrice
     }
 
     def 'should add discount to products - second 50% cheaper + one for two'() {
@@ -95,6 +95,6 @@ class OrderTest extends Specification {
         order.addProduct(ProductTestData.prepareLaptop("1000"))
 
         then:
-        order.getTotalPrice() == expectedTotalPrice
+        order.getActualTotalPrice() == expectedTotalPrice
     }
 }

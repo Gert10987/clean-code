@@ -24,7 +24,7 @@ public class CatalogService {
     }
 
     public Product getByProductType(ProductType productType) {
-        return catalogDatabasePort.getByProductType(productType).orElseThrow(
-                () -> new ProductNotExistException("Product type not exist [%s]", productType));
+        return catalogDatabasePort.getByProductType(productType)
+                .orElseThrow(() -> new ProductNotExistException("Product type not exist [%s]", productType));
     }
 }

@@ -18,5 +18,7 @@ interface OutPorts {
         void add(Order order);
 
         Optional<Order> getById(OrderId id);
+
+        void update(Order order);
     }
 }

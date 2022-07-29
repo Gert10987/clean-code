@@ -34,14 +34,19 @@ public class CatalogDatabaseInAdapterJooq implements OutPorts.CatalogDatabasePor
 
     @Override
     public Optional<Product> getById(ProductId productId) {
-        return context.selectFrom(Tables.PRODUCTS).where(Tables.PRODUCTS.ID.eq(productId.getId()))
+        return context.selectFrom(Tables.PRODUCTS)
+                .where(Tables.PRODUCTS.ID.eq(productId.getId()))
                 .fetchOptional()
                 .map(productsRecord -> new Product(Money.PLN("1"), ProductType.MILK, toLocalDate(productsRecord.get(Tables.PRODUCTS.EXPIRATION_DATE))));
     }
 
     @Override
     public Optional<Product> getByProductType(ProductType productType) {
-        return Optional.empty();
+        return context.selectFrom(Tables.PRODUCTS)
+                .where(Tables.PRODUCTS.TYPE.equalIgnoreCase(productType.toString()))
+                .fetchOptional()
+                .map(productsRecord -> new Product(Money.PLN("1"), ProductType.MILK, toLocalDate(productsRecord.get(Tables.PRODUCTS.EXPIRATION_DATE))));
+
     }
 
     private LocalDate toLocalDate(LocalDateTime localDateTime) {

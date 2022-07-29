@@ -22,7 +22,7 @@ public class Money {
         setCurrency(currency);
     }
 
-    private Money(BigDecimal amount, Currency currency) {
+    public Money(BigDecimal amount, Currency currency) {
         setAmount(amount.setScale(2, RoundingMode.HALF_EVEN));
         setCurrency(currency);
     }
