@@ -11,6 +11,6 @@ public class ScannerConfig {
 
     @Bean
     ScannerService scannerService(CatalogService catalogService) {
-        return new ScannerService(null, catalogService, () -> null);
+        return new ScannerService(null, null, catalogService, () -> null);
     }
 }
