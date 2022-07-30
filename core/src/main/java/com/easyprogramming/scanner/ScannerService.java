@@ -10,6 +10,9 @@ import com.easyprogramming.scanner.model.Billing;
 import com.easyprogramming.shared.Money;
 import com.easyprogramming.shared.ProductType;
 
+/**
+ * Managing orders
+ */
 public class ScannerService {
     private final OutPorts.OrdersDatabasePort orders;
     private final OutPorts.PrinterPort printerPort;
@@ -25,6 +28,10 @@ public class ScannerService {
         this.discountLoaderPort = discountLoaderPort;
     }
 
+    /**
+     * Create empty order.
+     * @return created order id
+     */
     public OrderId newOrder() {
         Order order = new Order(discountLoaderPort.loadDiscountData());
         orders.add(order);
@@ -32,6 +39,11 @@ public class ScannerService {
         return order.getId();
     }
 
+    /**
+     * Adding product to order and calculating total price and discounts.
+     * @param id order id
+     * @param productType product type/name
+     */
     public void scanProduct(OrderId id, ProductType productType) {
         Product foundProduct = catalogService.getByProductType(productType);
 
@@ -43,12 +55,22 @@ public class ScannerService {
         });
     }
 
+    /**
+     * Total value of order
+     * @param id order id
+     * @return Total value of order (total - discount)
+     */
     public Money getTotalValueOfOrder(OrderId id) {
         return orders.getById(id)
                 .map(Order::getActualTotalPrice)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found [%s]", id));
     }
 
+    /**
+     * Based on user request generate specific Bill type (for now hardcoded) // TODO
+     * @param id order id
+     * @return Content of bill
+     */
     public String printBill(OrderId id) {
         Order order = orders.getById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found [%s]", id));
