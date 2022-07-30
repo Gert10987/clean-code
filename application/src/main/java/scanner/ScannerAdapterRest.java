@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
-public class ScannerAdapterRest {
+class ScannerAdapterRest implements ScannerAdapterRestFacade {
 
     private ScannerService scannerService;
 

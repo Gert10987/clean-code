@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
+class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
 
     @Autowired
     private DSLContext context;

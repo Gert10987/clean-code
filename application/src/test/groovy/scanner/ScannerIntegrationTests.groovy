@@ -2,6 +2,7 @@ package scanner
 
 import app.App
 import com.jayway.jsonpath.JsonPath
+import orders.OrderId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -13,33 +14,58 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 @AutoConfigureMockMvc
 @WebMvcTest(controllers = [ScannerAdapterRest.class])
 @ContextConfiguration(classes = [App.class, TestConfig.class])
-class ScannerIntegrationTests extends WebBaseITTest {
+class ScannerIntegrationTests extends WebBaseITTest implements ScannerAdapterRestFacade {
 
     @Autowired
     private MockMvc mvc
 
-    def "Simple scan products"() {
-        when:
+    def "Simple scanning products"() {
+        given:
+        def orderId = newOrder()
+
+        and:
+        scanProduct(orderId.getId(), "MILK")
+        scanProduct(orderId.getId(), "LAPTOP")
+
+        then:
+        "1234_Money(amount=2.00, currency=PLN)" == getDetails(orderId.getId())
+    }
+
+    // TODO change code
+    def "Not found should return 400"() {
+        given:
+        def orderId = newOrder()
+
+        and:
+        scanProduct(orderId.getId(), "UNKNOWN")
+
+        then:
+        thrown()
+        "1234_Money(amount=2.00, currency=PLN)" == getDetails(orderId.getId())
+    }
+
+    @Override
+    OrderId newOrder() {
         def response = mvc.perform(MockMvcRequestBuilders.post("/orders"))
                 .andReturn()
                 .response
                 .contentAsString
 
-        def id = JsonPath.read(response, '$.id')
+        new OrderId(UUID.fromString(JsonPath.read(response, '$.id')))
+    }
 
-        and:
+    @Override
+    void scanProduct(UUID id, String productType) {
         mvc.perform(MockMvcRequestBuilders.patch("/orders/{id}", id)
-                .content("MILK")
+                .content(productType)
                 .contentType(MediaType.TEXT_PLAIN_VALUE))
+    }
 
-        mvc.perform(MockMvcRequestBuilders.patch("/orders/{id}", id)
-                .content("LAPTOP")
-                .contentType(MediaType.TEXT_PLAIN_VALUE));
-
-        then:
+    @Override
+    String getDetails(UUID id) {
         mvc.perform(MockMvcRequestBuilders.get("/orders/{id}", id))
                 .andReturn()
                 .response
-                .contentAsString == "1234_Money(amount=2.00, currency=PLN)"
+                .contentAsString
     }
 }

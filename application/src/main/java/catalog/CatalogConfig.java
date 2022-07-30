@@ -6,7 +6,7 @@ import org.springframework.core.annotation.Order;
 
 @Configuration
 @Order(1)
-public class CatalogConfig {
+class CatalogConfig {
 
     @Bean
     OutPorts.CatalogDatabasePort catalogDatabasePort() {

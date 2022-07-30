@@ -7,7 +7,7 @@ import org.springframework.core.annotation.Order;
 
 @Configuration
 @Order(2)
-public class ScannerConfig {
+class ScannerConfig {
 
     @Bean
     OutPorts.PrinterPort printerPort() {

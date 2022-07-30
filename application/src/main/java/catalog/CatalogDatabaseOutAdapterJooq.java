@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
+class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
 
     @Autowired
     private DSLContext context;
