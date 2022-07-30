@@ -181,7 +181,7 @@
                                 </database>
                                 <target>
                                     <packageName>com.easyprogramming.app.db.model</packageName>
-                                    <directory>src/main/java/app</directory>
+                                    <directory>src/main/java</directory>
                                 </target>
                             </generator>
                         </configuration>
