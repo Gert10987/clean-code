@@ -1,10 +1,7 @@
 package orders;
 
 import catalog.Product;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import shared.Money;
 
 import java.util.ArrayList;
@@ -15,6 +12,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @ToString
 @Builder
+@AllArgsConstructor
 public class Order {
     @Getter
     private final OrderId id;

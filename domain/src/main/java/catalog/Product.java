@@ -1,10 +1,7 @@
 package catalog;
 
 import catalog.exception.ExpirationDateShouldBeAfterNowException;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import shared.Money;
 import shared.ProductType;
 
@@ -14,6 +11,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @ToString
 @Builder
+@AllArgsConstructor
 public class Product {
 
     private final ProductId id;
