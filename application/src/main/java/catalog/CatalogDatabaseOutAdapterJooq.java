@@ -3,7 +3,6 @@ package catalog;
 import db.model.Tables;
 import db.model.tables.records.ProductsRecord;
 import org.jooq.DSLContext;
-import org.jooq.Fields;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shared.Money;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CatalogDatabaseInAdapterJooq implements OutPorts.CatalogDatabasePort {
+public class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
 
     @Autowired
     private DSLContext context;

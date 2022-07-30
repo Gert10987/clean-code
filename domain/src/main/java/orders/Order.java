@@ -1,7 +1,6 @@
 package orders;
 
 import catalog.Product;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -71,7 +70,7 @@ public class Order {
     private void calculate() {
         totalPrice = items
                 .stream()
-                .map(Item::getTotalPrice)
+                .map(Item::getPriceMinusDiscount)
                 .reduce(Money.ZERO_PLN(), Money::add);
     }
 }

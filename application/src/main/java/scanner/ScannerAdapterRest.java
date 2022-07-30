@@ -19,7 +19,7 @@ public class ScannerAdapterRest {
         this.scannerService = scannerService;
     }
 
-    @PostMapping()
+    @PostMapping
     public OrderId newOrder() {
         return scannerService.newOrder();
     }
@@ -27,5 +27,10 @@ public class ScannerAdapterRest {
     @PatchMapping(value = "/{id}", consumes = {MediaType.TEXT_PLAIN_VALUE})
     public void scanProduct(@PathVariable UUID id, @RequestBody String productType) {
         scannerService.scanProduct(new OrderId(id), ProductType.valueOf(productType));
+    }
+
+    @GetMapping(value = "/{id}", produces = {MediaType.TEXT_PLAIN_VALUE})
+    public String getDetails(@PathVariable UUID id) {
+        return scannerService.printBill(new OrderId(id));
     }
 }

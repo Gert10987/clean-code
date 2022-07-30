@@ -10,12 +10,16 @@ import org.springframework.core.annotation.Order;
 public class ScannerConfig {
 
     @Bean
+    OutPorts.PrinterPort printerPort() {
+        return new PrinterOutAdapter();
+    }
+    @Bean
     OutPorts.OrdersDatabasePort ordersDatabasePort() {
-        return new OrdersDatabaseInAdapterJooq();
+        return new OrdersDatabaseOutAdapterJooq();
     }
 
     @Bean
-    ScannerService scannerService(CatalogService catalogService, OutPorts.OrdersDatabasePort ordersDatabasePort) {
-        return new ScannerService(ordersDatabasePort, null, catalogService, () -> null);
+    ScannerService scannerService(CatalogService catalogService, OutPorts.OrdersDatabasePort ordersDatabasePort, OutPorts.PrinterPort printerPort) {
+        return new ScannerService(ordersDatabasePort, printerPort, catalogService, () -> null);
     }
 }

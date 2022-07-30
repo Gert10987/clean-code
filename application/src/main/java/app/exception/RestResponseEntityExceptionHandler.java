@@ -14,8 +14,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     // TODO Extend error handling
     @ExceptionHandler(value = { DomainException.class })
-    protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "Something wrong";
+    protected ResponseEntity<Object> handleConflict(DomainException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

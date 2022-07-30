@@ -1,18 +1,21 @@
 package orders;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import shared.Money;
 import shared.ProductType;
 
 @EqualsAndHashCode
 @ToString
+@Getter
+@AllArgsConstructor
 public class Item {
 
-    private final ProductType productType;
+    private ProductType productType;
 
-    private final Money price;
+    private Money price;
     private Money discount;
 
     Item(ProductType productType, Money price) {
@@ -26,15 +29,7 @@ public class Item {
         this.discount = discount;
     }
 
-    Money getPrice() {
-        return price;
-    }
-
-    Money getTotalPrice() {
+    public Money getPriceMinusDiscount() {
         return price.minus(discount);
-    }
-
-    public ProductType getProductType() {
-        return productType;
     }
 }
