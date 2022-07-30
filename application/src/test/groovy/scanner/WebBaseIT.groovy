@@ -14,7 +14,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 @Testcontainers
-abstract class WebBaseITTest extends Specification {
+abstract class WebBaseIT extends Specification {
 
     @Shared
     static PostgreSQLContainer postgreSQLContainer

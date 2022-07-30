@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @ToString
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Order {
     @Getter
     private final OrderId id;

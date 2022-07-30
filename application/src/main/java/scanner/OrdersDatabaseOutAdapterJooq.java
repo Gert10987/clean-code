@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static java.util.Currency.getInstance;
 
 @Service
-class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
+public class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
 
     @Autowired
     private DSLContext context;

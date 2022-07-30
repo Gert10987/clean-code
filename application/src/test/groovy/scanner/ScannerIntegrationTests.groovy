@@ -15,7 +15,7 @@ import org.springframework.web.util.NestedServletException
 @AutoConfigureMockMvc
 @WebMvcTest(controllers = [ScannerAdapterRest.class])
 @ContextConfiguration(classes = [App.class, TestConfig.class])
-class ScannerIntegrationTests extends WebBaseITTest implements ScannerAdapterRestFacade {
+class ScannerIntegrationTests extends WebBaseIT implements ScannerAdapterRestFacade {
 
     @Autowired
     private MockMvc mvc

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @ToString
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Product {
 
     private final ProductId id;
