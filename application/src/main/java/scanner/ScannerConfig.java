@@ -1,6 +1,7 @@
 package scanner;
 
 import catalog.CatalogService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -21,5 +22,10 @@ class ScannerConfig {
     @Bean
     ScannerService scannerService(CatalogService catalogService, OutPorts.OrdersDatabasePort ordersDatabasePort, OutPorts.PrinterPort printerPort) {
         return new ScannerService(ordersDatabasePort, printerPort, catalogService, () -> null);
+    }
+
+    @Bean
+    ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

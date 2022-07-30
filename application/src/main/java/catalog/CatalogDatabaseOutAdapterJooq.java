@@ -10,6 +10,7 @@ import shared.ProductType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.Optional;
 
 @Service
@@ -20,11 +21,7 @@ class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
 
     @Override
     public void add(Product product) {
-        ProductsRecord productEntity = new ProductsRecord();
-
-        productEntity.setId(product.getId().getId());
-        productEntity.setType(product.getProductType().toString());
-        productEntity.setExpirationDate(product.getExpirationDate().atStartOfDay());
+        ProductsRecord productEntity = toRecord(product);
 
         context.insertInto(Tables.PRODUCTS)
                 .set(productEntity)
@@ -36,7 +33,7 @@ class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
         return context.selectFrom(Tables.PRODUCTS)
                 .where(Tables.PRODUCTS.ID.eq(productId.getId()))
                 .fetchOptional()
-                .map(productsRecord -> new Product(Money.PLN("1"), ProductType.MILK, toLocalDate(productsRecord.get(Tables.PRODUCTS.EXPIRATION_DATE))));
+                .map(this::toDomainObject);
     }
 
     @Override
@@ -44,8 +41,25 @@ class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
         return context.selectFrom(Tables.PRODUCTS)
                 .where(Tables.PRODUCTS.TYPE.equalIgnoreCase(productType.toString()))
                 .fetchOptional()
-                .map(productsRecord -> new Product(Money.PLN("1"), ProductType.MILK, toLocalDate(productsRecord.get(Tables.PRODUCTS.EXPIRATION_DATE))));
+                .map(this::toDomainObject);
 
+    }
+
+    private Product toDomainObject(ProductsRecord productsRecord) {
+        return Product.builder()
+                .id(new ProductId(productsRecord.getId()))
+                .price(new Money(productsRecord.getTotalPrice(), Currency.getInstance(productsRecord.getCurrency().getLiteral())))
+                .expirationDate(toLocalDate(productsRecord.getExpirationDate()))
+                .build();
+    }
+
+    private static ProductsRecord toRecord(Product product) {
+        ProductsRecord productEntity = new ProductsRecord();
+
+        productEntity.setId(product.getId().getId());
+        productEntity.setType(product.getProductType().toString());
+        productEntity.setExpirationDate(product.getExpirationDate().atStartOfDay());
+        return productEntity;
     }
 
     private LocalDate toLocalDate(LocalDateTime localDateTime) {
