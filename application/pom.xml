@@ -180,7 +180,7 @@
                                     <includeUniqueKeys>true</includeUniqueKeys>
                                 </database>
                                 <target>
-                                    <packageName>db.model</packageName>
+                                    <packageName>com.easyprogramming.app.db.model</packageName>
                                     <directory>src/main/java/app</directory>
                                 </target>
                             </generator>
