@@ -1,13 +1,14 @@
 package com.easyprogramming.scanner;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.easyprogramming.app.db.model.Tables;
 import com.easyprogramming.app.db.model.enums.Currency;
 import com.easyprogramming.app.db.model.tables.records.OrdersDescriptionRecord;
 import com.easyprogramming.app.db.model.tables.records.OrdersRecord;
 import com.easyprogramming.orders.Order;
 import com.easyprogramming.orders.OrderId;
+import com.easyprogramming.shared.ProductType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.Record;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import com.easyprogramming.shared.ProductType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static java.util.Currency.getInstance;
 
 @Service
-public class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
+class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
 
     @Autowired
     private DSLContext context;
