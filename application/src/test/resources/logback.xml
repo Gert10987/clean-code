@@ -1,0 +1,17 @@
+<configuration>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%-4r [%t] %5p %c{1} - %m - request.id=%X{requestId} - ip=%X{ip} %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="root" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%-4r [%t] %5p %c{1} - %m %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="root" />
+    </root>
+</configuration>

@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods
 
 @RunWith(value = ArchUnitRunner)
-@AnalyzeClasses(packages = ['scanner', 'orders', 'catalog'])
+@AnalyzeClasses(packages = ['com.easyprogramming'])
 class PackageArchitectureTests {
 
     @ArchTest

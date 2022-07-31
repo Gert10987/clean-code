@@ -1,8 +1,8 @@
 package com.easyprogramming.scanner
 
 import com.easyprogramming.App
-import com.jayway.jsonpath.JsonPath
 import com.easyprogramming.orders.OrderId
+import com.jayway.jsonpath.JsonPath
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
