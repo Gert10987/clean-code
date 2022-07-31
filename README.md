@@ -161,7 +161,10 @@ Infrastructure level of application (here are all configs and implementation of 
    8918 [http-nio-8080-exec-1]  INFO scanner - New order, [OrderId(id=7e95984d-537e-4c1d-be5d-0f8db008f2e3)] - request.id=bad418a2-d893-4f31-b6df-4f5030f69e3e - ip=127.0.0.1 
    ```
 4. Metrics of application are collected via prometheus and can be found in grafana
-5. Domain exceptions are transformed to HTTP statuses via filters
+
+    ![alt text](doc/grafana.png "Grafana")
+
+6. Domain exceptions are transformed to HTTP statuses via filters
    ```java
    @ExceptionHandler(value = { ProductNotExistException.class })
     protected ResponseEntity<Object> handleConflict(ProductNotExistException ex, WebRequest request) {
@@ -188,11 +191,52 @@ Infrastructure level of application (here are all configs and implementation of 
     }
  ```
 7. Only integration tests in this module, based on webMvc and real postgresql db running in the test container.
+ ```java
+private class FakeClient implements ScannerAdapterRestFacade {
+
+
+        private MvcResult lastResult
+
+        @Override
+        OrderId newOrder() {
+            def response = mvc.perform(MockMvcRequestBuilders.post("/orders"))
+                    .andReturn()
+                    .response
+                    .contentAsString
+
+            new OrderId(UUID.fromString(JsonPath.read(response, '$.id')))
+        }
+
+        @Override
+        void scanProduct(UUID id, String productType) {
+            def res = mvc.perform(MockMvcRequestBuilders.patch("/orders/{id}", id)
+                    .content(productType)
+                    .contentType(MediaType.TEXT_PLAIN_VALUE))
+                    .andReturn()
+
+            lastResult = res
+
+            if (res.response.status != 200) {
+                throw res.getResolvedException()
+            }
+        }
+   ...
+ ```
 8. Added some java docs.
 9. Docker-compose file to run db, grafana, prometheus
    ```shell
    docker-compose up 
    docker-compose down -v  
+   ```
+10. Jooq as interface to db layer (To handle sql in more explicit way)
+   ```java
+@Override
+    public Optional<Product> getById(ProductId productId) {
+        return context.selectFrom(Tables.PRODUCTS)
+                .where(Tables.PRODUCTS.ID.eq(productId.getId()))
+                .fetchOptional()
+                .map(this::toDomainObject);
+    }
    ```
 
 It is only a demo project to show tips, tricks and good practices :)
