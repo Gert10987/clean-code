@@ -27,7 +27,7 @@ class ScannerAdapterRest implements ScannerAdapterRestFacade {
     @PostMapping
     @Timed(value = "new.order.time", description = "Time taken to create new order")
     public OrderId newOrder() {
-        OrderId orderId = scannerService.newOrder();
+        var orderId = scannerService.newOrder();
         log.info("New order, [{}]", orderId);
         return orderId;
     }

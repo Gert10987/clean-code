@@ -21,7 +21,7 @@ class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
 
     @Override
     public void add(Product product) {
-        ProductsRecord productEntity = toRecord(product);
+        var productEntity = toRecord(product);
 
         context.insertInto(Tables.PRODUCTS)
                 .set(productEntity)
@@ -53,8 +53,8 @@ class CatalogDatabaseOutAdapterJooq implements OutPorts.CatalogDatabasePort {
                 .build();
     }
 
-    private static ProductsRecord toRecord(Product product) {
-        ProductsRecord productEntity = new ProductsRecord();
+    private ProductsRecord toRecord(Product product) {
+        var productEntity = new ProductsRecord();
 
         productEntity.setId(product.getId().getId());
         productEntity.setType(product.getProductType().toString());

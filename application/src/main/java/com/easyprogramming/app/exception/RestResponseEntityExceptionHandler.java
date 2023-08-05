@@ -14,14 +14,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     // TODO Extend error handling
-    @ExceptionHandler(value = { ProductNotExistException.class })
+    @ExceptionHandler(value = {ProductNotExistException.class})
     protected ResponseEntity<Object> handleConflict(ProductNotExistException ex, WebRequest request) {
-        String bodyOfResponse = ex.getMessage();
+        var bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
-    @ExceptionHandler(value = { DomainException.class })
+
+    @ExceptionHandler(value = {DomainException.class})
     protected ResponseEntity<Object> handleConflict(DomainException ex, WebRequest request) {
-        String bodyOfResponse = ex.getMessage();
+        var bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

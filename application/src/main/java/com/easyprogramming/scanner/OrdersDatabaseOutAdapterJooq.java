@@ -4,8 +4,10 @@ import com.easyprogramming.app.db.model.Tables;
 import com.easyprogramming.app.db.model.enums.Currency;
 import com.easyprogramming.app.db.model.tables.records.OrdersDescriptionRecord;
 import com.easyprogramming.app.db.model.tables.records.OrdersRecord;
+import com.easyprogramming.orders.Item;
 import com.easyprogramming.orders.Order;
 import com.easyprogramming.orders.OrderId;
+import com.easyprogramming.shared.Money;
 import com.easyprogramming.shared.ProductType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,8 +43,7 @@ class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
 
     @Override
     public Optional<Order> getById(OrderId id) {
-
-        Optional<Record> dbRes = context.select()
+        var dbRes = context.select()
                 .from(Tables.ORDERS)
                 .join(Tables.ORDERS_DESCRIPTION)
                 .on(Tables.ORDERS.ID.eq(Tables.ORDERS_DESCRIPTION.ORDER_ID))
@@ -59,15 +60,13 @@ class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
     }
 
     private void upsert(Order order) {
-
-        OrdersRecord ordersRecord = toOrderRecord(order);
+        var ordersRecord = toOrderRecord(order);
 
         context.insertInto(Tables.ORDERS)
                 .set(ordersRecord)
                 .onDuplicateKeyUpdate()
                 .set(ordersRecord)
                 .execute();
-
 
         OrdersDescriptionRecord ordersDescriptionRecord = toOrderDescriptionRecord(order);
 
@@ -90,7 +89,6 @@ class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
     }
 
     private OrdersDescriptionRecord toOrderDescriptionRecord(Order order) {
-
         var orderDesc = new OrdersDescriptionRecord();
         orderDesc.setOrderId(order.getId().getId());
 
@@ -105,56 +103,51 @@ class OrdersDatabaseOutAdapterJooq implements OutPorts.OrdersDatabasePort {
         return orderDesc;
     }
 
-    private static Item toItemRecord(com.easyprogramming.orders.Item item) {
-        return new Item(item.getProductType(),
-                new Money(item.getPrice().getAmount(), item.getPrice().getCurrency()),
-                new Money(item.getDiscount().getAmount(), item.getDiscount().getCurrency()));
+    private static ItemDb toItemRecord(com.easyprogramming.orders.Item item) {
+        return new ItemDb(item.getProductType(),
+                new MoneyDb(item.getPrice().getAmount(), item.getPrice().getCurrency()),
+                new MoneyDb(item.getDiscount().getAmount(), item.getDiscount().getCurrency()));
     }
 
     private Order toDomainObject(Record record) {
+        var itemRecords = extractItems(record);
 
-        List<Item> items = extractItems(record);
-
-        com.easyprogramming.shared.Money totalPrice = new com.easyprogramming.shared.Money(record.get(Tables.ORDERS.TOTAL_PRICE),
+        var totalPrice = new Money(record.get(Tables.ORDERS.TOTAL_PRICE),
                 getInstance(record.get(Tables.ORDERS.CURRENCY).getLiteral()));
-        com.easyprogramming.shared.Money totalDiscount = new com.easyprogramming.shared.Money(record.get(Tables.ORDERS.TOTAL_DISCOUNT),
+        var totalDiscount = new Money(record.get(Tables.ORDERS.TOTAL_DISCOUNT),
                 getInstance(record.get(Tables.ORDERS.CURRENCY).getLiteral()));
 
         return Order.builder()
                 .id(new OrderId(record.get(Tables.ORDERS.ID)))
-                .items(toDomainItems(items))
+                .items(toDomainItems(itemRecords))
                 .totalPrice(totalPrice)
                 .totalDiscount(totalDiscount)
                 .build();
     }
 
-    private List<com.easyprogramming.orders.Item> toDomainItems(List<Item> items) {
-        return items.stream()
-                .map(itemDb -> new com.easyprogramming.orders.Item(itemDb.productType(),
-                        new com.easyprogramming.shared.Money(itemDb.price().amount(), itemDb.price().currency()),
-                        new com.easyprogramming.shared.Money(itemDb.discount().amount(), itemDb.discount().currency())))
+    private List<com.easyprogramming.orders.Item> toDomainItems(List<ItemDb> itemRecords) {
+        return itemRecords.stream()
+                .map(itemRecordDb -> new Item(itemRecordDb.productType(),
+                        new Money(itemRecordDb.price().amount(), itemRecordDb.price().currency()),
+                        new Money(itemRecordDb.discount().amount(), itemRecordDb.discount().currency())))
                 .collect(Collectors.toList());
     }
 
-    private List<Item> extractItems(Record record) {
-        List<Item> items;
-
+    private List<ItemDb> extractItems(Record record) {
         try {
-            items = objectMapper.readValue(record.get(Tables.ORDERS_DESCRIPTION.ITEMS).data(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, Item.class));
+            return objectMapper.readValue(record.get(Tables.ORDERS_DESCRIPTION.ITEMS).data(),
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, ItemDb.class));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
-        return items;
     }
 
-    private record Item(ProductType productType,
-                        OrdersDatabaseOutAdapterJooq.Money price,
-                        OrdersDatabaseOutAdapterJooq.Money discount) {
+    private record ItemDb(ProductType productType,
+                          MoneyDb price,
+                          MoneyDb discount) {
     }
 
-    private record Money(BigDecimal amount, java.util.Currency currency) {
+    private record MoneyDb(BigDecimal amount, java.util.Currency currency) {
     }
 }
 

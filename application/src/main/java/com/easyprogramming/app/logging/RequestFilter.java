@@ -12,7 +12,7 @@ public class RequestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        UUID uniqueId = UUID.randomUUID();
+        var uniqueId = UUID.randomUUID();
         MDC.put("requestId", uniqueId.toString());
         MDC.put("ip", servletRequest.getRemoteAddr());
 
